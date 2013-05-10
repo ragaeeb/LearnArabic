@@ -1,0 +1,67 @@
+Modern Business Card 
+
+----------------------------------------------------------------------------------------------
+
+*** Description ***
+
+Horizontal
+2 sided   
+CMYK print ready
+Cut and bleed guidelines   
+Full easy customizable
+Full vector icon 
+Full layered PSD file
+3.75*2.25 inch
+300 dpi
+
+----------------------------------------------------------------------------------------------
+
+*** fonts used ***
+1- Arial Font
+2- Arvo Font :
+   the link ( http://www.fontsquirrel.com/fonts/arvo )
+
+----------------------------------------------------------------------------------------------
+
+*** EFFECT USED ***
+* Gradiant Overlay in :
+  - BackGround
+  - Content Design
+  - Icons
+  - Logo Shape
+
+----------------------------------------------------------------------------------------------
+
+
+*** HOW TO EDIT CONTENT ***
+1*how to edit - color :
+   1-background - color
+    choose the side you would like to edit from groups or follow this path (side/background group/background layer)
+    , double click on (fx) ICON 
+    , then choose (Gradiant Overlay) 
+    , then double click on the color bar
+    , then choose the color you want and press ok
+
+   2-(icon, Content design)- color
+    choose the side you would like to edit from groups and the layer 
+    , double click on (fx) ICON 
+    , then choose (Gradiant Overlay) 
+    , then double click on the color bar
+    , then choose the color you want and press ok
+          
+   3-text - color
+    choose the side you would like to edit from the text groups and the layer
+    , choose the text layer you would like to edit
+    , then click on the A charachter
+    , then click on th color box to choose the color
+    , then press ok
+
+   
+2*how to edit - text:
+   choose the side you would like to edit from text groups and the layer
+   , double click on left box ( T icon ) of the text 
+   , then put the text  ( paste it OR type it ) 
+   , then press the right ENTER button on the keyboard
+
+
+----------------------------------------------------------------------------------------------
