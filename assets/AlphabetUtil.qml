@@ -87,7 +87,7 @@ QtObject {
 
         theDataModel.push({
                 'glyph': "ظ",
-                'transliteration': "Zaa'"
+                'transliteration': "Dhaa'"
             });
 
         theDataModel.push({
@@ -144,6 +144,12 @@ QtObject {
                 'glyph': "ي",
                 'transliteration': "Yaa'"
             });
+            
+        for (var i = 0; i < theDataModel.length; i++) {
+            var current = theDataModel[i];
+            current["index"] = i;
+            theDataModel[i] = current;
+        }
             
         return theDataModel;
     }

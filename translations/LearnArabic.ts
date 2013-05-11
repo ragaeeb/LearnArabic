@@ -36,6 +36,10 @@ http://tanzil.ca
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Select 1st &amp; last range</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>
@@ -75,6 +79,26 @@ http://tanzil.ca
         <source>Letter pronunciations will be recited with a %1 voice.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recitations will be repeated from the beginning of the list once finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recitations will not be repeated when playback ends.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There will be a delay of %1 seconds between pronunciations.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>canadainc::Persistance</name>
@@ -95,6 +119,18 @@ http://tanzil.ca
     </message>
     <message>
         <source>Welcome to Learn Arabic. This app was developed to make it easy for beginners to learn the Arabic alphabet. From below, choose what you want.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Learn the Arabic alphabet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test your knowledge!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

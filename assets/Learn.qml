@@ -1,28 +1,39 @@
 import bb.cascades 1.0
 import bb.multimedia 1.0
+import com.canadainc.data 1.0
 
 BasePage
 {
     actions: [
         ActionItem {
-            imageSource: player.mediaState == MediaState.Started ? "asset:///images/ic_stop.png" : "asset:///images/ic_play.png"
-            title: player.mediaState == MediaState.Started ? qsTr("Stop") : qsTr("Play")
+            property bool timerActive: false
+            id: playAction
+            imageSource: timerActive || player.mediaState == MediaState.Started ? "asset:///images/ic_stop.png" : "asset:///images/ic_play.png"
+            title: timerActive || player.mediaState == MediaState.Started ? qsTr("Stop") : qsTr("Play")
             ActionBar.placement: ActionBarPlacement.OnBar
             
             onTriggered: {
-                console.log("CURRENT TRACK", player.currentTrack);
-                
-                if (player.currentTrack >= 0) {
-                    player.currentTrack = -1;
+                if (timerActive || player.mediaState == MediaState.Started) {
+                    console.log("\n\n\nSTOPPING!!");
+                    player.stopped = true;
+                    timer.stop();
+                    player.stop();
+                    timerActive = false;
                 } else {
+                    player.stopped = false;
+                    console.log("\n\n\nPLAYING!!");
+                    listView.scrollToItem([ 0 ], ScrollAnimation.None);
                     player.currentTrack = 0;
-                    var target = [0];
-                    
-                    listView.triggered(target);
-                    listView.scrollToItem(target, ScrollAnimation.Default);
-                }
+                    player.playlist = [ 0, theDataModel.size()-1 ];
+                    var voice = persist.getValueFor("voice")
+                    player.sourceUrl = "asset://audio/" + voice + "/0.mp3"
 
-                console.log("CURRENT TRACK2", player.currentTrack);
+                    if (nowPlaying.acquired) {
+                        player.play();
+                    } else {
+                        nowPlaying.acquire()
+                    }
+                }
             }
         }
     ]
@@ -31,49 +42,8 @@ BasePage
     {
         ListView {
             id: listView
-            
-            attachedObjects: [
-                AlphabetUtil {
-                    id: alphaUtil
-                },
-
-                NowPlayingConnection {
-                    id: nowPlaying
-                    connectionName: "arabic"
-
-                    onAcquired: {
-                        player.reset()
-                        player.play()
-                    }
-
-                    onPause: {
-                        player.pause()
-                    }
-
-                    onRevoked: {
-                        player.stop()
-                    }
-                },
-
-                MediaPlayer {
-                    property int currentTrack
-                    id: player
-
-                    onPlaybackCompleted: {
-                        if (currentTrack >= 0) {
-                            ++currentTrack;
-                            
-                            if ( currentTrack >= theDataModel.size() ) {
-                                currentTrack = 0;
-                            }
-                            
-                            var target = [currentTrack];
-                            listView.triggered(target);
-                            listView.scrollToItem(target, ScrollAnimation.Default);
-                        }
-                    }
-                }
-            ]
+            horizontalAlignment: HorizontalAlignment.Fill
+            verticalAlignment: VerticalAlignment.Fill
 
             dataModel: ArrayDataModel {
                 id: theDataModel
@@ -85,21 +55,57 @@ BasePage
             }
             
             onTriggered: {
-                if (player.currentTrack >= 0 && player.mediaStae == MediaState.Started) {
-                    player.currentTrack = indexPath[0]
+                player.stopped = false;
+                player.stop();
+                player.currentTrack = indexPath[0];
+                player.playlist = [player.currentTrack];
+                var voice = persist.getValueFor("voice");
+                player.sourceUrl = "asset://audio/" + voice + "/" + indexPath + ".mp3"
+
+                if (nowPlaying.acquired) {
+                    player.play();
                 } else {
-                    var voice = persist.getValueFor("voice")
-
-                    player.stop()
-                    player.sourceUrl = "asset://audio/" + voice + "/" + indexPath + ".mp3"
-
-                    if (nowPlaying.acquired) {
-                        player.play();
-                    } else {
-                        nowPlaying.acquire()
-                    }
+                    nowPlaying.acquire()
                 }
             }
+            
+            onSelectionChanged: {
+                playMultiAction.enabled = selectionList().length > 0;
+            }
+
+            multiSelectHandler {
+                actions: [
+                    ActionItem {
+                        id: playMultiAction
+                        title: qsTr("Play")
+                        imageSource: "asset:///images/ic_play.png"
+
+                        onTriggered: {
+                            player.stopped = false;
+                            var selected = listView.selectionList();
+                            var first = selected[0];
+                            var last = selected[selected.length-1];
+                            player.stop();
+                            var target = first[0];
+                            player.currentTrack = target;
+                            player.playlist = [ target, last[0] ];
+                            var voice = persist.getValueFor("voice")
+                            player.sourceUrl = "asset://audio/" + voice + "/" + target + ".mp3"
+
+                            if (nowPlaying.acquired) {
+                                listView.scrollToItem(first, ScrollAnimation.None);
+                                player.play();
+                            } else {
+                                nowPlaying.acquire()
+                            }
+                        }
+                    }
+                ]
+
+                status: qsTr("Select 1st & last range") + Retranslate.onLanguageChanged
+            }
+
+            multiSelectAction: MultiSelectActionItem {}
 
             listItemComponents: [
                 ListItemComponent {
@@ -111,7 +117,7 @@ BasePage
                         }
 
                         horizontalAlignment: HorizontalAlignment.Fill
-                        background: selected || active ? Color.create("#ff6B4226") : undefined
+                        background: selected || active ? Color.create("#7f6B4226") : undefined
                         rightPadding: 20; leftPadding: 20
 
                         Label {
@@ -134,12 +140,84 @@ BasePage
                             horizontalAlignment: HorizontalAlignment.Fill
                             verticalAlignment: VerticalAlignment.Center
                         }
+                        
+                        contextActions: [
+                            ActionSet {
+                                title: ListItemData.glyph
+                                subtitle: ListItemData.transliteration
+                            }
+                        ]
                     }
                 }
             ]
 
-            horizontalAlignment: HorizontalAlignment.Fill
-            verticalAlignment: VerticalAlignment.Fill
+            attachedObjects: [
+                AlphabetUtil {
+                    id: alphaUtil
+                },
+
+                NowPlayingConnection {
+                    id: nowPlaying
+                    connectionName: "arabic"
+
+                    onAcquired: {
+                        listView.scrollToItem([player.currentTrack], ScrollAnimation.None);
+                        player.reset();
+                        player.play();
+                    }
+
+                    onPause: {
+                        player.pause()
+                    }
+
+                    onRevoked: {
+                        player.stop()
+                    }
+                },
+
+                MediaPlayer {
+                    property variant playlist
+                    property int currentTrack
+                    property bool stopped: false
+                    id: player
+
+                    onPlaybackCompleted:
+                    {
+                        if (stopped) {
+                            console.log("\n\n\nPLAYBACK COMPLETED BUT STOPPED PRESSED");
+                            stopped = false;
+                        } else {
+                            ++ currentTrack;
+
+                            if (currentTrack <= playlist[playlist.length - 1]) {
+                                timer.animate = true;
+                                playAction.timerActive = true;
+                                timer.start(persist.getValueFor("delay"));
+                            } else if (persist.getValueFor("repeat") == 1) { // reached the end of the list
+                                currentTrack = playlist[0];
+                                timer.animate = false;
+                                playAction.timerActive = true;
+                                timer.start(persist.getValueFor("delay"));
+                            }
+                        }
+                    }
+                },
+
+                QTimer {
+                    property bool animate: false
+                    id: timer
+                    singleShot: true
+
+                    onTimeout: {
+                        playAction.timerActive = false;
+                        var voice = persist.getValueFor("voice");
+                        player.sourceUrl = "asset://audio/" + voice + "/" + player.currentTrack + ".mp3";
+
+                        listView.scrollToItem([player.currentTrack], animate ? ScrollAnimation.Default : ScrollAnimation.None);
+                        player.play();
+                    }
+                }
+            ]
         }
     }
 }

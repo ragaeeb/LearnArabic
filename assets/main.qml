@@ -45,20 +45,6 @@ NavigationPane {
 
     BasePage {
         id: mainPage
-        
-        actions: [
-        	ActionItem {
-        		title: qsTr("Learn") + Retranslate.onLanguageChanged
-        		imageSource: "file:///usr/share/icons/ic_go.png"
-        		ActionBar.placement: ActionBarPlacement.OnBar
-        		
-        		onTriggered: {
-        		    definition.source = "Learn.qml"
-        		    var page = definition.createObject()
-        		    navigationPane.push(page)
-              	}
-            }
-        ]
 
         contentContainer: Container
         {
@@ -70,6 +56,49 @@ NavigationPane {
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
                 textStyle.textAlign: TextAlign.Center
+            }
+            
+            Divider {
+                bottomMargin: 0;
+            }
+            
+            ListView {
+                dataModel: ArrayDataModel {
+                    id: theDataModel
+                }
+                
+                onCreationCompleted: {
+                    theDataModel.append({
+                            'title': qsTr("Learn"),
+                            'description': qsTr("Learn the Arabic alphabet"),
+                            'imageSource': "asset:///images/ic_learn.png"
+                        });
+                    theDataModel.append({
+                            'title': qsTr("Test"),
+                            'description': qsTr("Test your knowledge!"),
+                            'imageSource': "asset:///images/ic_test.png"
+                        });
+                }
+                
+                listItemComponents: [
+                    ListItemComponent {
+                        StandardListItem {
+                            imageSource: ListItemData.imageSource;
+                            title: ListItemData.title;
+                        }
+                    }
+                ]
+                
+                onTriggered: {
+                    if (indexPath == 0) {
+                        definition.source = "Learn.qml"
+                    } else {
+                        definition.source = "Test.qml"
+                    }
+
+                    var page = definition.createObject()
+                    navigationPane.push(page)
+                }
             }
         }
     }

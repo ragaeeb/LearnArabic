@@ -29,6 +29,21 @@ BasePage
 	            }
 	        }
 
+            SettingPair {
+                title: qsTr("Repeat")
+                toggle.checked: persist.getValueFor("repeat") == 1
+
+                toggle.onCheckedChanged: {
+                    persist.saveValueFor("repeat", checked ? 1 : 0)
+
+                    if (checked) {
+                        infoText.text = qsTr("Recitations will be repeated from the beginning of the list once finished.") + Retranslate.onLanguageChanged
+                    } else {
+                        infoText.text = qsTr("Recitations will not be repeated when playback ends.") + Retranslate.onLanguageChanged
+                    }
+                }
+            }
+
             DropDown {
                 title: qsTr("Voice") + Retranslate.onLanguageChanged
                 horizontalAlignment: HorizontalAlignment.Fill
@@ -63,6 +78,35 @@ BasePage
 
                 onSelectedOptionChanged: {
                     infoText.text = qsTr("Letter pronunciations will be recited with a %1 voice.").arg(selectedOption.text) + Retranslate.onLanguageChanged
+                }
+            }
+
+            Container {
+                topPadding: 20
+
+                layout: StackLayout {
+                    orientation: LayoutOrientation.LeftToRight
+                }
+
+                Label {
+                    text: qsTr("Delay")
+
+                    layoutProperties: StackLayoutProperties {
+                        spaceQuota: 1
+                    }
+                }
+
+                Slider {
+                    horizontalAlignment: HorizontalAlignment.Right
+                    preferredWidth: 225
+                    fromValue: 0
+                    toValue: 5000
+                    value: persist.getValueFor("delay")
+
+                    onValueChanged: {
+                        persist.saveValueFor("delay", value)
+                        infoText.text = qsTr("There will be a delay of %1 seconds between pronunciations.").arg(value/1000);
+                    }
                 }
             }
 
