@@ -2,6 +2,7 @@ import bb.cascades 1.0
 
 Page {
     property alias contentContainer: contentContainer.controls
+    property bool showTitleBar: false
 
     Container {
         attachedObjects: [
@@ -21,6 +22,7 @@ Page {
             leftMargin: 0
             rightMargin: 0
             bottomMargin: 0
+            visible: showTitleBar
 
             horizontalAlignment: HorizontalAlignment.Center
             verticalAlignment: VerticalAlignment.Top
@@ -50,6 +52,7 @@ Page {
             bottomMargin: 0
             horizontalAlignment: HorizontalAlignment.Fill
             verticalAlignment: VerticalAlignment.Top
+            visible: showTitleBar
         }
 
         Container // This container is replaced

@@ -101,6 +101,17 @@ http://tanzil.ca
     </message>
 </context>
 <context>
+    <name>Test</name>
+    <message>
+        <source>You ran out of time, game over!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game over, too many wrong answers!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>canadainc::Persistance</name>
     <message>
         <source>OK</source>
@@ -126,11 +137,27 @@ http://tanzil.ca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Test</source>
+        <source>Test your knowledge!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Test your knowledge!</source>
+        <source>Easy Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For the inner child in you!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hard Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you can handle it!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

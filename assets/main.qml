@@ -45,6 +45,7 @@ NavigationPane {
 
     BasePage {
         id: mainPage
+        showTitleBar: true
 
         contentContainer: Container
         {
@@ -59,7 +60,7 @@ NavigationPane {
             }
             
             Divider {
-                bottomMargin: 0;
+                bottomMargin: 0; topMargin: 20
             }
             
             ListView {
@@ -74,9 +75,21 @@ NavigationPane {
                             'imageSource': "asset:///images/ic_learn.png"
                         });
                     theDataModel.append({
-                            'title': qsTr("Test"),
+                            'title': qsTr("Easy Test"),
+                            'description': qsTr("For the inner child in you!"),
+                            'imageSource': "asset:///images/ic_test_easy.png"
+                        });
+
+                    theDataModel.append({
+                            'title': qsTr("Medium Test"),
                             'description': qsTr("Test your knowledge!"),
-                            'imageSource': "asset:///images/ic_test.png"
+                            'imageSource': "asset:///images/ic_test_medium.png"
+                        });
+
+                    theDataModel.append({
+                            'title': qsTr("Hard Test"),
+                            'description': qsTr("If you can handle it!"),
+                            'imageSource': "asset:///images/ic_test_hard.png"
                         });
                 }
                 
@@ -85,6 +98,7 @@ NavigationPane {
                         StandardListItem {
                             imageSource: ListItemData.imageSource;
                             title: ListItemData.title;
+                            description: ListItemData.description
                         }
                     }
                 ]
@@ -96,8 +110,23 @@ NavigationPane {
                         definition.source = "Test.qml"
                     }
 
-                    var page = definition.createObject()
-                    navigationPane.push(page)
+                    var page = definition.createObject();
+                    
+                    navigationPane.push(page);
+
+                    if (indexPath == 1) {
+                        page.clockTime = 30;
+                        page.initialHealth = 20;
+                        page.start(false);
+                    } else if (indexPath == 2) {
+                        page.clockTime = 20;
+                        page.initialHealth = 10;
+                        page.start(true);
+                    } else if (indexPath == 3) {
+                        page.clockTime = 10;
+                        page.initialHealth = 3;
+                        page.start(true);
+                    }
                 }
             }
         }
