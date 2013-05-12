@@ -13,6 +13,7 @@ ApplicationUI::ApplicationUI(Application *app) : QObject(app), m_sceneCover("Cov
 	INIT_SETTING("voice", "female0");
 	INIT_SETTING("delay", 0);
 	INIT_SETTING("repeat", 1);
+	INIT_SETTING("fame", QVariantList());
 
 	qmlRegisterType<QTimer>("com.canadainc.data", 1, 0, "QTimer");
 

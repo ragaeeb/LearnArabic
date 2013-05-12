@@ -91,6 +91,12 @@ NavigationPane {
                             'description': qsTr("If you can handle it!"),
                             'imageSource': "asset:///images/ic_test_hard.png"
                         });
+
+                    theDataModel.append({
+                            'title': qsTr("Hall of Fame"),
+                            'description': qsTr("See your past accomplishments"),
+                            'imageSource': "asset:///images/ic_gold.png"
+                        });
                 }
                 
                 listItemComponents: [
@@ -106,8 +112,10 @@ NavigationPane {
                 onTriggered: {
                     if (indexPath == 0) {
                         definition.source = "Learn.qml"
-                    } else {
+                    } else if (indexPath == 1 || indexPath == 2 || indexPath == 3){
                         definition.source = "Test.qml"
+                    } else {
+                        definition.source = "HallOfFame.qml"
                     }
 
                     var page = definition.createObject();

@@ -2,6 +2,8 @@ import bb.cascades 1.0
 
 BasePage
 {
+    showTitleBar: true
+
     contentContainer: ScrollView
     {  
     	horizontalAlignment: HorizontalAlignment.Fill

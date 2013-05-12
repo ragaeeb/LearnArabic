@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
+    <name>HallOfFame</name>
+    <message>
+        <source>There are no finished games yet!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 correct, %2 incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1s</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HelpPage</name>
     <message>
         <source>
@@ -103,7 +118,19 @@ http://tanzil.ca
 <context>
     <name>Test</name>
     <message>
+        <source>%1
+
+Right answers: %2
+Wrong answers: %3
+Total time: %4 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>You ran out of time, game over!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test successfully completed! Good job!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -158,6 +185,14 @@ http://tanzil.ca
     </message>
     <message>
         <source>If you can handle it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hall of Fame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>See your past accomplishments</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

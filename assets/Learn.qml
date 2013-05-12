@@ -14,14 +14,12 @@ BasePage
             
             onTriggered: {
                 if (timerActive || player.mediaState == MediaState.Started) {
-                    console.log("\n\n\nSTOPPING!!");
                     player.stopped = true;
                     timer.stop();
                     player.stop();
                     timerActive = false;
                 } else {
                     player.stopped = false;
-                    console.log("\n\n\nPLAYING!!");
                     listView.scrollToItem([ 0 ], ScrollAnimation.None);
                     player.currentTrack = 0;
                     player.playlist = [ 0, theDataModel.size()-1 ];
@@ -184,7 +182,6 @@ BasePage
                     onPlaybackCompleted:
                     {
                         if (stopped) {
-                            console.log("\n\n\nPLAYBACK COMPLETED BUT STOPPED PRESSED");
                             stopped = false;
                         } else {
                             ++ currentTrack;

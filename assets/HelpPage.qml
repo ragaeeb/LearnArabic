@@ -3,6 +3,8 @@ import bb 1.0
 
 BasePage
 {
+    showTitleBar: true
+
     attachedObjects: [
         ApplicationInfo {
             id: appInfo

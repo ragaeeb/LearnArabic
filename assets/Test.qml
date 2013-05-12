@@ -8,6 +8,9 @@ BasePage {
     property int currentIndex;
     property int clockTime;
     property int initialHealth;
+    property int answersRight: 0
+    property int answersWrong: 0
+    property int totalTime: 0
 
     paneProperties: NavigationPaneProperties {
         property variant navPane: navigationPane
@@ -27,6 +30,18 @@ BasePage {
         clockLabel.time = 3;
         started = false;
         timer.start();
+    }
+    
+    function finish(message)
+    {
+        totalTime += clockTime - clockLabel.time;
+        
+        var fame = persist.getValueFor("fame");
+        fame.unshift( {'dateValue': new Date(), 'correct': answersRight, 'incorrect': answersWrong, 'time': totalTime} );
+        persist.saveValueFor("fame", fame);
+        
+        persist.showToast(qsTr("%1\n\nRight answers: %2\nWrong answers: %3\nTotal time: %4 seconds").arg(message).arg(answersRight).arg(answersWrong).arg(totalTime));
+        properties.navPane.pop();
     }
 
     contentContainer: Container
@@ -75,7 +90,8 @@ BasePage {
                                 currentIndex = 0;
                                 started = true;
                                 var voice = persist.getValueFor("voice");
-                                player.sourceUrl = "asset://audio/" + voice + "/"+ shuffledAudio[currentIndex].index +".mp3"
+                                player.sourceUrl = "asset://audio/" + voice + "/"+ shuffledAudio[currentIndex].index +".mp3";
+                                hintButton.text = shuffledAudio[currentIndex].transliteration;
 
                                 if (nowPlaying.acquired) {
                                     player.play();
@@ -83,8 +99,7 @@ BasePage {
                                     nowPlaying.acquire()
                                 }
                             } else { // user ran out of time, game over!
-                                persist.showToast( qsTr("You ran out of time, game over!") );
-                                properties.navPane.pop();
+                                finish( qsTr("You ran out of time, game over!") );
                             }
                         }
                     }
@@ -107,13 +122,14 @@ BasePage {
                         ++currentIndex;
                         
                         if ( currentIndex >= shuffledAudio.length ) {
-                            persist.showToast( qsTr("Test successfully completed! Good job!") );
+                            finish( qsTr("Test successfully completed! Good job!") );
                         } else {
                             listView.enabled = true;
                             var voice = persist.getValueFor("voice");
                             player.sourceUrl = "asset://audio/" + voice + "/" + shuffledAudio[currentIndex].index + ".mp3"
                             player.play();
                             timer.start();
+                            hintButton.text = shuffledAudio[currentIndex].transliteration;
                         }
                     }
                 }
@@ -132,8 +148,7 @@ BasePage {
             
             onHealthChanged: {
                 if (health < 0) {
-                    persist.showToast( qsTr("Game over, too many wrong answers!") );
-                    properties.navPane.pop();
+                    finish(qsTr("Game over, too many wrong answers!"));
                 } else if (health < Math.ceil(initialHealth/3) ) {
                     state = ProgressIndicatorState.Error;
                 } else if (health < Math.ceil(initialHealth / 1.5) ) {
@@ -155,6 +170,27 @@ BasePage {
             dataModel: ArrayDataModel {
                 id: theDataModel
             }
+            
+            leadingVisual: Container {
+                horizontalAlignment: HorizontalAlignment.Fill
+                
+                layout: StackLayout {
+                    orientation: LayoutOrientation.LeftToRight
+                }
+
+                Button {
+                    id: hintButton
+                    horizontalAlignment: HorizontalAlignment.Center
+                    
+                    layoutProperties: StackLayoutProperties {
+                        spaceQuota: 1
+                    }
+
+                    onClicked: {
+                        player.play();
+                    }
+                }
+            }
 
             onTriggered: {
                 var data = dataModel.data(indexPath);
@@ -163,11 +199,14 @@ BasePage {
                     sound.sound = SystemSound.VideoCallOutgoingEvent;
                     data["correct"] = 1;
                     enabled = false;
+                    ++answersRight;
                     timer.stop();
+                    totalTime += clockTime-clockLabel.time;
                     silentTimer.start(2000);
                 } else {
                     sound.sound = SystemSound.RecordingStopEvent;
                     data["correct"] = 2;
+                    ++ answersWrong;
                     lives.health = lives.health-1;
                 }
                 
@@ -188,7 +227,6 @@ BasePage {
                         background: active ? Color.create("#7f6B4226") : undefined
                         
                         onCorrectChanged: {
-                            console.log("CORRECT", correct);
                             if (correct == 1) {
                                 background = Color.DarkGreen
                             } else if (correct == 2) {
