@@ -38,13 +38,22 @@ BasePage
     
     contentContainer: Container
     {
-        ListView {
+        ListView
+        {
             id: listView
             horizontalAlignment: HorizontalAlignment.Fill
             verticalAlignment: VerticalAlignment.Fill
+            snapMode: SnapMode.LeadingEdge
+            stickToEdgePolicy: ListViewStickToEdgePolicy.BeginningThenEnd
+            property int requestedWidth: 720
+            property int requestedHeight: 1280
 
             dataModel: ArrayDataModel {
                 id: theDataModel
+            }
+            
+            layout: StackListLayout {
+                id: sll
             }
 
             onCreationCompleted: {
@@ -106,34 +115,28 @@ BasePage
             multiSelectAction: MultiSelectActionItem {}
 
             listItemComponents: [
-                ListItemComponent {
-                    Container {
+                ListItemComponent
+                {
+                    Container
+                    {
+                        id: rootItem
                         property bool selected: ListItem.selected
                         property bool active: ListItem.active
-                        layout: StackLayout {
-                            orientation: LayoutOrientation.LeftToRight
-                        }
-
+                        layout: DockLayout {}
                         horizontalAlignment: HorizontalAlignment.Fill
+                        verticalAlignment: VerticalAlignment.Fill
                         background: selected || active ? Color.create("#7f6B4226") : undefined
-                        rightPadding: 20; leftPadding: 20
+                        preferredHeight: 1280
+                        preferredWidth: 720
+                        
+                        Header {
+                            title: ListItemData.transliteration
+                        }
 
                         Label {
                             text: ListItemData.glyph
                             textStyle.fontSize: FontSize.PointValue
                             textStyle.fontSizeValue: 60
-                            textStyle.textAlign: TextAlign.Center
-                            horizontalAlignment: HorizontalAlignment.Fill
-                            verticalAlignment: VerticalAlignment.Center
-                            
-                            layoutProperties: StackLayoutProperties {
-                                spaceQuota: 1
-                            }
-                        }
-
-                        Label {
-                            text: ListItemData.transliteration
-                            textStyle.fontSize: FontSize.Small
                             textStyle.textAlign: TextAlign.Center
                             horizontalAlignment: HorizontalAlignment.Fill
                             verticalAlignment: VerticalAlignment.Center
@@ -212,6 +215,16 @@ BasePage
 
                         listView.scrollToItem([player.currentTrack], animate ? ScrollAnimation.Default : ScrollAnimation.None);
                         player.play();
+                    }
+                },
+                
+                OrientationHandler {
+                    onOrientationAboutToChange: {
+                        if (orientation == UIOrientation.Landscape) {
+                            sll.orientation = LayoutOrientation.LeftToRight;
+                        } else {
+                            sll.orientation = LayoutOrientation.TopToBottom;
+                        }
                     }
                 }
             ]
